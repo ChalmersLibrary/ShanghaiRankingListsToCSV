@@ -1,0 +1,9 @@
+GET http://shanghairanking.com/api/pub/v1/arwu/rank?version=2022
+Accept: application/json
+
+###
+GET http://shanghairanking.com/api/pub/v1/gras/rank?version=2022&subj_code=RS0101
+
+###
+GET http://shanghairanking.com/api/pub/v1/gras/subj?version=2022
+

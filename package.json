@@ -1,0 +1,15 @@
+{
+  "name": "shanghai-ranking-lists-to-csv",
+  "version": "1.0.0",
+  "description": "Saves ARWU and GRAS lists to csv files",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+  },
+  "keywords": [],
+  "author": "Lari Kovanen",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^3.2.10"
+  }
+}
