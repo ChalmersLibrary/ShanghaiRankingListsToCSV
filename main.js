@@ -52,7 +52,7 @@ async function saveARWU(year) {
     const element = incomingRankings[index];
     data += `\r\n"${element.ranking}","${element.univNameEn}","${element.region}","${element.regionRanking}","${element.score}","${element.indData[indicators['Alumni']]}","${element.indData[indicators['Award']]}","${element.indData[indicators['HiCi']]}","${element.indData[indicators['N&S']]}","${element.indData[indicators['PUB']]}","${element.indData[indicators['PCP']]}"`
   }
-  fs.writeFileSync(`shangai-arwu-${year}.csv`, data)
+  fs.writeFileSync(`shanghai-arwu-${year}.csv`, data)
 }
 
 async function saveGRAS(year) {
