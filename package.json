@@ -4,12 +4,12 @@
   "description": "Saves ARWU and GRAS lists to csv files",
   "main": "main.js",
   "type": "module",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [],
   "author": "Lari Kovanen",
   "license": "MIT",
   "dependencies": {
-    "node-fetch": "^3.2.10"
+    "node-fetch": "^3.2.10",
+    "tqdm": "^2.0.3"
   }
 }

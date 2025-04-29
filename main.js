@@ -1,4 +1,5 @@
 import fetch from 'node-fetch'
+import tqdm from 'tqdm'
 import fs from 'fs'
 
 if (process.argv[2] === undefined) {
@@ -6,6 +7,13 @@ if (process.argv[2] === undefined) {
   process.exit(1)
 }
 let year = process.argv[2]
+
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms)
+  })
+}
 
 async function getSubjects(year) {
   const response = await fetch(`http://shanghairanking.com/api/pub/v1/gras/subj?version=${year}`)
@@ -59,8 +67,8 @@ async function saveGRAS(year) {
   let subjects = await getSubjects(year)
 
   let data = '"Field", "Subject", "Institution", "Country/Region", "Q1", "CNCI", "IC", "Top", "Award", "Score"'
-  for (let index = 0; index < subjects.length; index++) {
-    const sub = subjects[index];
+  for (let sub of tqdm(subjects, { sameLine: true})) {
+    // const sub = subjects[index];
     let url = `http://shanghairanking.com/api/pub/v1/gras/rank?version=${year}&subj_code=${sub.subjectCode}`
     const response = await fetch(url)
     const gras = await response.json()
@@ -78,6 +86,7 @@ async function saveGRAS(year) {
     // rankings.forEach(item => {
     //   data += `\r\n"${element.field}","${element.subject}","${item.institution}", "${item.region}", "${item.q1}", "${item.cnci}", "${item.ic}", "${item.top}", "${item.award}", "${item.score}"`
     // })
+    await sleep(1000)
   }
   fs.writeFileSync(`shanghai-gras-${year}.csv`, data)
 }
