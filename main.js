@@ -65,29 +65,38 @@ async function saveARWU(year) {
 
 async function saveGRAS(year) {
   let subjects = await getSubjects(year)
+  let data = ''
+  let incomingIndicators
 
-  let data = '"Field", "Subject", "Institution", "Country/Region", "Q1", "CNCI", "IC", "Top", "Award", "Score"'
   for (let sub of tqdm(subjects, { sameLine: true})) {
-    // const sub = subjects[index];
     let url = `http://shanghairanking.com/api/pub/v1/gras/rank?version=${year}&subj_code=${sub.subjectCode}`
     const response = await fetch(url)
     const gras = await response.json()
 
-    let incomingIndicators = gras.data.indicators
+    incomingIndicators = gras.data.indicators
+    
     let incomingRankings = gras.data.rankings
 
     let indicators = getIndicators(incomingIndicators)
   
     for (let index = 0; index < incomingRankings.length; index++) {
       const rank = incomingRankings[index];
-      data += `\r\n"${sub.field}","${sub.subject}","${rank.univNameEn}", "${rank.region}", "${rank.indData[indicators['Q1']]}", "${rank.indData[indicators['CNCI']]}", "${rank.indData[indicators['IC']]}", "${rank.indData[indicators['TOP']]}", "${rank.indData[indicators['AWARD']]}", "${rank.score}"`
+      data += `\r\n"${sub.field}","${sub.subject}","${rank.univNameEn}", "${rank.region}",`
+      Object.entries(rank.indData).forEach(([key, value]) => {
+        data += ` "${value}",`
+      })
+      data +=` "${rank.score}"`
     }
 
-    // rankings.forEach(item => {
-    //   data += `\r\n"${element.field}","${element.subject}","${item.institution}", "${item.region}", "${item.q1}", "${item.cnci}", "${item.ic}", "${item.top}", "${item.award}", "${item.score}"`
-    // })
     await sleep(1000)
   }
+  let prepend = '"Field", "Subject", "Institution", "Country/Region", '
+  for(let i of incomingIndicators) {
+    prepend += `"${i.nameEn}", `
+  }
+  prepend += '"Score"'
+  
+  data = prepend + data
   fs.writeFileSync(`shanghai-gras-${year}.csv`, data)
 }
 
